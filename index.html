@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11131a">
+  <meta name="description" content="Frenzy Art Studio — a playful, browser-based pixel art editor.">
+  <title>Frenzy Art Studio</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Frenzy Art Studio home">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+        <span class="brand-copy"><strong>FRENZY</strong><small>ART STUDIO</small></span>
+      </a>
+      <div class="topbar-center"><span class="live-dot"></span><span>PIXEL PLAYGROUND</span><span class="topbar-divider"></span><span class="topbar-hint">Make something tiny &amp; brilliant.</span></div>
+      <div class="topbar-actions">
+        <button class="button button-quiet" id="undo-button" type="button" title="Undo (Ctrl/⌘ + Z)" disabled><span aria-hidden="true">↶</span><span class="action-label">Undo</span></button>
+        <button class="button button-quiet" id="redo-button" type="button" title="Redo (Ctrl/⌘ + Shift + Z)" disabled><span aria-hidden="true">↷</span><span class="action-label">Redo</span></button>
+        <button class="button button-primary" id="export-button" type="button"><span aria-hidden="true">↓</span> Export PNG</button>
+      </div>
+    </header>
+
+    <main class="studio-layout">
+      <aside class="tool-rail panel" aria-label="Drawing tools">
+        <div class="panel-kicker">TOOLS</div>
+        <button class="tool-button active" data-tool="pencil" type="button" aria-pressed="true" title="Pencil (B)"><span class="tool-icon" aria-hidden="true">✎</span><span>Pencil</span><kbd>B</kbd></button>
+        <button class="tool-button" data-tool="eraser" type="button" aria-pressed="false" title="Eraser (E)"><span class="tool-icon" aria-hidden="true">▱</span><span>Eraser</span><kbd>E</kbd></button>
+        <button class="tool-button" data-tool="bucket" type="button" aria-pressed="false" title="Bucket fill (G)"><span class="tool-icon" aria-hidden="true">▨</span><span>Fill</span><kbd>G</kbd></button>
+        <button class="tool-button" data-tool="eyedropper" type="button" aria-pressed="false" title="Eyedropper (I)"><span class="tool-icon" aria-hidden="true">⌖</span><span>Pick</span><kbd>I</kbd></button>
+        <div class="rail-spacer"></div>
+        <div class="rail-tip"><span aria-hidden="true">✦</span><small>Drag to<br>draw</small></div>
+      </aside>
+
+      <section class="workspace" aria-label="Pixel art workspace">
+        <div class="workspace-heading">
+          <div><span class="eyebrow">YOUR CANVAS</span><h1>Untitled masterpiece<span class="heading-sparkle">✦</span></h1></div>
+          <div class="canvas-meta"><span class="status-pill"><span class="live-dot"></span> READY</span><span id="dimension-label">16 × 16 px</span></div>
+        </div>
+        <div class="canvas-stage">
+          <div class="canvas-frame">
+            <div id="pixel-grid" class="pixel-grid" role="grid" aria-label="Pixel art canvas" aria-rowcount="16" aria-colcount="16"></div>
+          </div>
+        </div>
+        <div class="workspace-footer">
+          <div class="footer-legend"><span class="legend-swatch"></span><span>TRANSPARENT PIXELS</span><span class="footer-separator">/</span><span>PNG EXPORT</span></div>
+          <span id="cursor-readout" aria-live="polite">Ready to create</span>
+        </div>
+      </section>
+
+      <aside class="inspector panel" aria-label="Colour and canvas settings">
+        <section class="inspector-section">
+          <div class="section-heading"><div><span class="panel-kicker">01 / COLOUR</span><h2>Pick your shade</h2></div><span class="section-mark">◒</span></div>
+          <div class="colour-picker-row">
+            <label class="colour-well" for="colour-picker"><input id="colour-picker" type="color" value="#f47c5b" aria-label="Choose a drawing colour"></label>
+            <div class="hex-field"><label for="hex-input">HEX VALUE</label><input id="hex-input" type="text" value="#F47C5B" maxlength="7" spellcheck="false" aria-label="Hex colour value"></div>
+          </div>
+          <div class="palette-heading"><span>QUICK PALETTE</span><button id="add-colour" class="text-button" type="button">+ Save colour</button></div>
+          <div id="palette" class="palette" aria-label="Saved colours">
+            <button class="swatch selected" data-colour="#f47c5b" style="--swatch:#f47c5b" type="button" aria-label="Coral"></button>
+            <button class="swatch" data-colour="#f5c66b" style="--swatch:#f5c66b" type="button" aria-label="Sunshine"></button>
+            <button class="swatch" data-colour="#8bcf9b" style="--swatch:#8bcf9b" type="button" aria-label="Mint"></button>
+            <button class="swatch" data-colour="#71b7d8" style="--swatch:#71b7d8" type="button" aria-label="Sky"></button>
+            <button class="swatch" data-colour="#8d8be8" style="--swatch:#8d8be8" type="button" aria-label="Periwinkle"></button>
+            <button class="swatch" data-colour="#d59ad5" style="--swatch:#d59ad5" type="button" aria-label="Lilac"></button>
+            <button class="swatch" data-colour="#f18ea2" style="--swatch:#f18ea2" type="button" aria-label="Pink"></button>
+            <button class="swatch" data-colour="#f2eee4" style="--swatch:#f2eee4" type="button" aria-label="Cream"></button>
+            <button class="swatch" data-colour="#e9e9ed" style="--swatch:#e9e9ed" type="button" aria-label="White"></button>
+            <button class="swatch" data-colour="#a7a9b4" style="--swatch:#a7a9b4" type="button" aria-label="Grey"></button>
+            <button class="swatch" data-colour="#555967" style="--swatch:#555967" type="button" aria-label="Slate"></button>
+            <button class="swatch" data-colour="#262a38" style="--swatch:#262a38" type="button" aria-label="Ink"></button>
+          </div>
+        </section>
+
+        <div class="inspector-divider"></div>
+        <section class="inspector-section">
+          <div class="section-heading"><div><span class="panel-kicker">02 / CANVAS</span><h2>Pixel dimensions</h2></div><span class="section-mark">▦</span></div>
+          <div class="dimension-inputs">
+            <label>WIDTH <span class="dimension-control"><input id="grid-width" type="number" min="4" max="64" value="16"><span>PX</span></span></label>
+            <span class="dimension-cross">×</span>
+            <label>HEIGHT <span class="dimension-control"><input id="grid-height" type="number" min="4" max="64" value="16"><span>PX</span></span></label>
+          </div>
+          <button class="button button-secondary full-width" id="resize-button" type="button">Resize canvas <span aria-hidden="true">↗</span></button>
+          <label class="toggle-row"><span><strong>Show grid lines</strong><small>Pixel boundaries on canvas</small></span><input id="grid-lines" type="checkbox" checked><span class="toggle-ui"></span></label>
+          <label class="toggle-row"><span><strong>Transparent background</strong><small>Keep empty pixels clear in PNG</small></span><input id="transparent-background" type="checkbox" checked><span class="toggle-ui"></span></label>
+        </section>
+
+        <div class="inspector-divider"></div>
+        <section class="inspector-section actions-section">
+          <div class="section-heading"><div><span class="panel-kicker">03 / ACTIONS</span><h2>Make it fresh</h2></div><span class="section-mark">✧</span></div>
+          <button class="button button-secondary full-width" id="clear-button" type="button"><span aria-hidden="true">⌫</span> Clear artwork</button>
+          <p class="helper-copy">Your latest changes stay in this browser tab while you work.</p>
+        </section>
+        <div class="inspector-bottom"><span class="brand-mini">FRENZY <b>✦</b></span><span>BUILT FOR PIXEL PEOPLE</span></div>
+      </aside>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
